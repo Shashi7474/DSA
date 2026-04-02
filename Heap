@@ -1,0 +1,13 @@
+import heapq
+
+heap = []
+
+heapq.heappush(heap, 10)
+heapq.heappush(heap, 5)
+heapq.heappush(heap, 20)
+
+print("Min element:", heap[0])
+
+print("Popped:", heapq.heappop(heap))
+
+print("Heap:", heap)
