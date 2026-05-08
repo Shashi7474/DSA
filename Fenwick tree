@@ -1,0 +1,25 @@
+class FenwickTree:
+    def __init__(self, n):
+        self.n = n
+        self.bit = [0] * (n + 1)
+
+    def update(self, i, val):
+        while i <= self.n:
+            self.bit[i] += val
+            i += i & -i
+
+    def query(self, i):
+        s = 0
+        while i > 0:
+            s += self.bit[i]
+            i -= i & -i
+        return s
+
+
+ft = FenwickTree(5)
+arr = [1,2,3,4,5]
+
+for i in range(len(arr)):
+    ft.update(i+1, arr[i])
+
+print("Prefix sum up to 3:", ft.query(3))
