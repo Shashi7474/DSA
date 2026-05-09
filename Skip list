@@ -1,0 +1,55 @@
+import random
+
+MAX_LEVEL = 4
+
+class Node:
+    def __init__(self, key, level):
+        self.key = key
+        self.forward = [None] * (level + 1)
+
+class SkipList:
+    def __init__(self):
+        self.header = Node(-1, MAX_LEVEL)
+        self.level = 0
+
+    def random_level(self):
+        lvl = 0
+        while random.random() < 0.5 and lvl < MAX_LEVEL:
+            lvl += 1
+        return lvl
+
+    def insert(self, key):
+        update = [None] * (MAX_LEVEL + 1)
+        current = self.header
+
+        for i in range(self.level, -1, -1):
+            while current.forward[i] and current.forward[i].key < key:
+                current = current.forward[i]
+            update[i] = current
+
+        current = current.forward[0]
+
+        if current is None or current.key != key:
+            rlevel = self.random_level()
+
+            if rlevel > self.level:
+                for i in range(self.level + 1, rlevel + 1):
+                    update[i] = self.header
+                self.level = rlevel
+
+            node = Node(key, rlevel)
+
+            for i in range(rlevel + 1):
+                node.forward[i] = update[i].forward[i]
+                update[i].forward[i] = node
+
+    def display(self):
+        for i in range(self.level + 1):
+            node = self.header.forward[i]
+            print("Level", i, end=": ")
+            while node:
+                print(node.key, end=" ")
+                node = node.forward[i]
+            print()
+
+sl = SkipList()
