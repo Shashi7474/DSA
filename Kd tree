@@ -1,0 +1,32 @@
+class KDNode:
+    def __init__(self, point, left=None, right=None):
+        self.point = point
+        self.left = left
+        self.right = right
+
+def build_kdtree(points, depth=0):
+    if not points:
+        return None
+
+    k = len(points[0])
+    axis = depth % k
+
+    points.sort(key=lambda x: x[axis])
+    mid = len(points) // 2
+
+    return KDNode(
+        points[mid],
+        build_kdtree(points[:mid], depth + 1),
+        build_kdtree(points[mid + 1:], depth + 1)
+    )
+
+def preorder(root):
+    if root:
+        print(root.point)
+        preorder(root.left)
+        preorder(root.right)
+
+points = [(3,6), (17,15), (13,15), (6,12), (9,1)]
+
+root = build_kdtree(points)
+preorder(root)
