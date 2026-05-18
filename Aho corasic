@@ -1,0 +1,32 @@
+from collections import deque
+
+class Node:
+    def __init__(self):
+        self.children = {}
+        self.fail = None
+        self.output = []
+
+class AhoCorasick:
+    def __init__(self):
+        self.root = Node()
+
+    def add_word(self, word):
+        node = self.root
+
+        for ch in word:
+            if ch not in node.children:
+                node.children[ch] = Node()
+
+            node = node.children[ch]
+
+        node.output.append(word)
+
+    def build(self):
+        q = deque()
+
+        for child in self.root.children.values():
+            child.fail = self.root
+            q.append(child)
+
+        while q:
+            current = q.popleft()
