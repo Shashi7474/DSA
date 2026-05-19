@@ -1,0 +1,51 @@
+class Node:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def build(arr, l, r):
+    if l == r:
+        return Node(arr[l])
+
+    mid = (l + r) // 2
+
+    left = build(arr, l, mid)
+    right = build(arr, mid + 1, r)
+
+    return Node(left.val + right.val, left, right)
+
+def update(node, l, r, idx, value):
+    if l == r:
+        return Node(value)
+
+    mid = (l + r) // 2
+
+    if idx <= mid:
+        left = update(node.left, l, mid, idx, value)
+        return Node(left.val + node.right.val, left, node.right)
+    else:
+        right = update(node.right, mid + 1, r, idx, value)
+        return Node(node.left.val + right.val, node.left, right)
+
+def query(node, l, r, ql, qr):
+    if qr < l or ql > r:
+        return 0
+
+    if ql <= l and r <= qr:
+        return node.val
+
+    mid = (l + r) // 2
+
+    return (
+        query(node.left, l, mid, ql, qr) +
+        query(node.right, mid + 1, r, ql, qr)
+    )
+
+arr = [1, 2, 3, 4]
+
+root1 = build(arr, 0, len(arr)-1)
+root2 = update(root1, 0, len(arr)-1, 2, 10)
+
+print("Old Version Sum:", query(root1, 0, 3, 0, 3))
+print("New Version Sum:", query(root2, 0, 3, 0, 3))
