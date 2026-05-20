@@ -1,0 +1,50 @@
+import random
+
+class TreapNode:
+    def __init__(self, key):
+        self.key = key
+        self.priority = random.randint(1, 100)
+        self.left = None
+        self.right = None
+
+def rotate_right(y):
+    x = y.left
+    y.left = x.right
+    x.right = y
+    return x
+
+def rotate_left(x):
+    y = x.right
+    x.right = y.left
+    y.left = x
+    return y
+
+def insert(root, key):
+    if root is None:
+        return TreapNode(key)
+
+    if key < root.key:
+        root.left = insert(root.left, key)
+
+        if root.left.priority > root.priority:
+            root = rotate_right(root)
+    else:
+        root.right = insert(root.right, key)
+
+        if root.right.priority > root.priority:
+            root = rotate_left(root)
+
+    return root
+
+def inorder(root):
+    if root:
+        inorder(root.left)
+        print(root.key, end=" ")
+        inorder(root.right)
+
+root = None
+
+for num in [50, 30, 20, 40, 70]:
+    root = insert(root, num)
+
+inorder(root)
