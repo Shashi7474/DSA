@@ -1,0 +1,18 @@
+def build_suffix_array(text):
+    suffixes = []
+
+    for i in range(len(text)):
+        suffixes.append((text[i:], i))
+
+    suffixes.sort()
+
+    suffix_array = []
+
+    for suffix in suffixes:
+        suffix_array.append(suffix[1])
+
+    return suffix_array
+
+text = "banana"
+
+print("Suffix Array:", build_suffix_array(text))
