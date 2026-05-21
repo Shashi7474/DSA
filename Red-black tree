@@ -1,0 +1,52 @@
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.parent = None
+        self.left = None
+        self.right = None
+        self.color = "RED"
+
+class RedBlackTree:
+    def __init__(self):
+        self.NULL = Node(0)
+        self.NULL.color = "BLACK"
+        self.root = self.NULL
+
+    def insert(self, key):
+        node = Node(key)
+        node.left = self.NULL
+        node.right = self.NULL
+
+        parent = None
+        current = self.root
+
+        while current != self.NULL:
+            parent = current
+            if node.data < current.data:
+                current = current.left
+            else:
+                current = current.right
+
+        node.parent = parent
+
+        if parent is None:
+            self.root = node
+        elif node.data < parent.data:
+            parent.left = node
+        else:
+            parent.right = node
+
+        node.color = "BLACK"
+
+    def inorder(self, node):
+        if node != self.NULL:
+            self.inorder(node.left)
+            print(node.data, end=" ")
+            self.inorder(node.right)
+
+rb = RedBlackTree()
+
+for i in [10, 20, 30, 15]:
+    rb.insert(i)
+
+rb.inorder(rb.root)
