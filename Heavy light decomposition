@@ -1,0 +1,40 @@
+class HLD:
+    def __init__(self, n):
+        self.n = n
+        self.graph = [[] for _ in range(n)]
+        self.parent = [-1] * n
+        self.depth = [0] * n
+        self.size = [0] * n
+        self.heavy = [-1] * n
+
+    def add_edge(self, u, v):
+        self.graph[u].append(v)
+        self.graph[v].append(u)
+
+    def dfs(self, v, p):
+        self.size[v] = 1
+        max_size = 0
+
+        for u in self.graph[v]:
+            if u != p:
+                self.parent[u] = v
+                self.depth[u] = self.depth[v] + 1
+
+                self.dfs(u, v)
+
+                self.size[v] += self.size[u]
+
+                if self.size[u] > max_size:
+                    max_size = self.size[u]
+                    self.heavy[v] = u
+
+hld = HLD(5)
+
+hld.add_edge(0,1)
+hld.add_edge(1,2)
+hld.add_edge(1,3)
+hld.add_edge(3,4)
+
+hld.dfs(0,-1)
+
+print("Heavy Child Array:", hld.heavy)
