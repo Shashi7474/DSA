@@ -1,0 +1,64 @@
+from collections import defaultdict
+
+class Graph:
+    def __init__(self, vertices):
+        self.V = vertices
+        self.graph = defaultdict(list)
+
+    def add_edge(self, u, v):
+        self.graph[u].append(v)
+
+    def dfs(self, v, visited, stack):
+        visited[v] = True
+
+        for i in self.graph[v]:
+            if not visited[i]:
+                self.dfs(i, visited, stack)
+
+        stack.append(v)
+
+    def transpose(self):
+        g = Graph(self.V)
+
+        for i in self.graph:
+            for j in self.graph[i]:
+                g.add_edge(j, i)
+
+        return g
+
+    def dfs_util(self, v, visited):
+        visited[v] = True
+        print(v, end=" ")
+
+        for i in self.graph[v]:
+            if not visited[i]:
+                self.dfs_util(i, visited)
+
+    def print_scc(self):
+        stack = []
+        visited = [False] * self.V
+
+        for i in range(self.V):
+            if not visited[i]:
+                self.dfs(i, visited, stack)
+
+        gr = self.transpose()
+
+        visited = [False] * self.V
+
+        while stack:
+            i = stack.pop()
+
+            if not visited[i]:
+                gr.dfs_util(i, visited)
+                print()
+
+g = Graph(5)
+
+g.add_edge(1,0)
+g.add_edge(0,2)
+g.add_edge(2,1)
+g.add_edge(0,3)
+g.add_edge(3,4)
+
+g.print_scc()
